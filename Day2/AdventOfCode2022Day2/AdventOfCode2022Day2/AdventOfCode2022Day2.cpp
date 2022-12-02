@@ -7,52 +7,59 @@
 
 using namespace std;
 
-const string P1_ROCK = "A";
-const string P1_PAPER = "B";
-const string P1_SCISSOR = "C";
+const string ROCK = "A";
+const string PAPER = "B";
+const string SCISSOR = "C";
 
-const string P2_ROCK = "X";
-const string P2_PAPER = "Y";
-const string P2_SCISSOR = "Z";
+const string WIN = "Z";
+const string DRAW = "Y";
+const string LOSE = "X";
 
-std::map<string, vector<string>> resultMap =
+std::map<string, vector<string>> resultMatrixMap =
 {
     {
-        P1_ROCK,
+        ROCK,
         {
-            P2_SCISSOR, // R beats S
-            P2_ROCK, // R draws R
-            P2_PAPER, // P beats R
+            SCISSOR, // R beats S
+            ROCK, // R draws R
+            PAPER, // P beats R
         }
     },
     
     {
-        P1_PAPER,
+        PAPER,
         {
-            P2_ROCK, // P beats R
-            P2_PAPER, // P draws P
-            P2_SCISSOR, // S beats P
+            ROCK, // P beats R
+            PAPER, // P draws P
+            SCISSOR, // S beats P
         }
     },
      
     {
-        P1_SCISSOR,
+        SCISSOR,
         {
-            P2_PAPER, // S beats P
-            P2_SCISSOR, // S draws S
-            P2_ROCK, // R beats S
+            PAPER, // S beats P
+            SCISSOR, // S draws S
+            ROCK, // R beats S
         }
     }
 };
 
-std::map<string, int> pointMap =
+std::map<string, int> outcomeIndexMap =
 {
-    { P2_ROCK, 1 },
-    { P2_PAPER, 2 },
-    { P2_SCISSOR, 3 }, 
+    { LOSE, 0 },
+    { DRAW, 1 },
+    { WIN, 2 }, 
 };
 
-int CalculatePoints(string them, string me);
+std::map<string, int> choicePointsMap =
+{
+    { ROCK, 1 },
+    { PAPER, 2 },
+    { SCISSOR, 3 }, 
+};
+
+int CalculatePoints(string theirChoice, string expectedOutcome);
 
 int main(int argc, char* argv[])
 {
@@ -87,27 +94,18 @@ int main(int argc, char* argv[])
     return 0; 
 }
 
-int CalculatePoints(string them, string me)
+int CalculatePoints(string theirChoice, string expectedOutcome)
 {
-    auto pointIterator = pointMap.find(me);
-    int amount = pointIterator->second;
-    
-    // Find the outcomes for their move
-    auto outcomeIterator = resultMap.find(them);
-    for(int i = 0; i < 3; ++i)
-    {
-        // Find the index of my choice to find out points won
-        if(outcomeIterator->second[i] == me)
-        {
-            int resultPoints = i * 3;
-            
-            cout << them << " vs " << me << ". " << resultPoints << " + " << amount << endl;
-            
-            amount += resultPoints;
-            
-            break;
-        }
-    }
+    // Find which option we need to play
+    auto outcomeIterator = outcomeIndexMap.find(expectedOutcome);
+    auto resultIterator = resultMatrixMap.find(theirChoice);
+    string myChoice = resultIterator->second[outcomeIterator->second];
 
-    return amount;
+    // Calculate points
+    int choicePoints = choicePointsMap.find(myChoice)->second;
+    int resultPoints = outcomeIterator->second * 3;
+            
+    cout << theirChoice << " vs " << expectedOutcome << ". " << choicePoints << " + " << resultPoints << endl;
+
+    return choicePoints + resultPoints;
 }
