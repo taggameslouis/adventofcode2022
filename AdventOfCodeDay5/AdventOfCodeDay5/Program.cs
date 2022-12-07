@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace AdventOfCodeDay5
 {
@@ -51,11 +52,10 @@ namespace AdventOfCodeDay5
             var fromStack = stacks[from].Crates;
             var toStack = stacks[to].Crates;
 
-            for (var i = 0; i < count; ++i)
-            {
-                toStack.Insert(0, fromStack[0]);
-                fromStack.RemoveAt(0);
-            }
+            var take = fromStack.Take(count).ToList();
+            fromStack.RemoveRange(0, count);
+            
+            toStack.InsertRange(0, take);
         }
 
         private static void ProcessStackMap(string line, ref List<Stack> stacks)
