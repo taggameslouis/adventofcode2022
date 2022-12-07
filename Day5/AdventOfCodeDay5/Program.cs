@@ -31,7 +31,7 @@ namespace AdventOfCodeDay5
                     ProcessStackMap(line, ref stacks);
                 }
             }
-
+                    
             for(var i = 0; i < stacks.Count; ++i)
             {
                 Console.Write(stacks[i].Crates[0]);
