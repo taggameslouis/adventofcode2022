@@ -18,6 +18,7 @@ namespace AdventOfCodeDay4
             var lines = File.ReadAllLines("input.txt");
 
             var containCount = 0;
+            var overlapCount = 0; 
             foreach (var line in lines)
             {
                 var sectionDatas = GetSections(line);
@@ -27,10 +28,15 @@ namespace AdventOfCodeDay4
                     {
                         containCount++;
                     }
+
+                    if(CheckOverlap(sectionDatas[i], sectionDatas[i + 1]))
+                    {
+                        overlapCount++;
+                    }
                 }
             }
 
-            Console.WriteLine($"Contain count: {containCount}");
+            Console.WriteLine($"Contain count: {containCount}. Overlap count: {overlapCount}");
         }
 
         private static List<Data> GetSections(string line)
@@ -55,6 +61,11 @@ namespace AdventOfCodeDay4
         {
             return left.Min <= right.Min && left.Max >= right.Max
                    || right.Min <= left.Min && right.Max >= left.Max;
+        }
+
+        private static bool CheckOverlap(Data left, Data right)
+        {
+            return left.Max >= right.Min && left.Min <= right.Max;
         }
     }
 }
