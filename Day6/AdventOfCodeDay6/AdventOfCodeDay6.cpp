@@ -20,7 +20,7 @@ int findUniqueSetOfCharacters(ifstream& fin, int bufferSize)
             break;
 
         sort(buffer.begin(), buffer.end());
-        const auto dupesIt = std::adjacent_find(buffer.begin(), buffer.end());
+        const auto dupesIt = adjacent_find(buffer.begin(), buffer.end());
         if (dupesIt == buffer.end())
         {
             return count + bufferSize - 1;
@@ -38,6 +38,9 @@ int main(int argc, char* argv[])
 
     int startIndexOfPacket = findUniqueSetOfCharacters(fin, 4);
     cout << "[PacketSeek] Found at " << startIndexOfPacket << endl;
+    
+    int startIndexOfMessage = findUniqueSetOfCharacters(fin, 14);
+    cout << "[MessageSeek] Found at " << startIndexOfMessage << endl;
     
     return 0;
 }
